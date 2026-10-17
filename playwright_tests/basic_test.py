@@ -9,7 +9,7 @@ def test_site_opens():
         response = page.goto("http://localhost:8080")
 
         assert response is not None
-        assert response.status == 404
+        assert response.status == 200
 
         # Проверяем, что у страницы есть заголовок
         assert page.title() != ""
