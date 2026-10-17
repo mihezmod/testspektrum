@@ -28,7 +28,7 @@ def test_contacts_navigation():
 
         page.wait_for_timeout(1000)
 
-        assert page.evaluate("window.scrollY") = 0
+        assert page.evaluate("window.scrollY") == 0
 
         browser.close()
 
