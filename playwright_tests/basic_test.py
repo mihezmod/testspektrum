@@ -9,7 +9,7 @@ def test_site_opens():
         response = page.goto("http://localhost:8080")
 
         assert response is not None
-        assert response.status == 200
+        assert response.status == 201
 
         # Проверяем, что у страницы есть заголовок
         assert page.title() != ""
@@ -28,7 +28,7 @@ def test_contacts_navigation():
 
         page.wait_for_timeout(1000)
 
-        assert page.evaluate("window.scrollY") > 0
+        assert page.evaluate("window.scrollY") = 0
 
         browser.close()
 
