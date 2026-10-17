@@ -3,11 +3,10 @@ from playwright.sync_api import sync_playwright
 
 def test_site_opens():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
         page = browser.new_page()
 
         response = page.goto("http://localhost:8080")
-        page.wait_for_timeout(3000)
 
         assert response is not None
         assert response.status == 200
@@ -20,7 +19,7 @@ def test_site_opens():
 
 def test_contacts_navigation():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
         page = browser.new_page()
 
         page.goto("http://localhost:8080")
