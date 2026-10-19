@@ -20,7 +20,6 @@ MENUES = [
 ]
 
 
-
 # Декоратор pytest. Позволяет запустить функцию несколько раз с разными значениями аргументов.
 @pytest.mark.parametrize("page_url", PAGES)
 @pytest.mark.parametrize("menu", MENUES)
