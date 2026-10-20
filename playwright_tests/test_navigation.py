@@ -18,7 +18,7 @@ MENUES = [
     ("header", "body > div > header > div > nav > a"),
     ("footer", r"body > div > footer > div.container-page.grid.gap-8.md\:grid-cols-2 > nav > ul > li > a"),
 ]
-
+PAGE_TIMEOUT = 10_000
 
 # Декоратор pytest. Позволяет запустить функцию несколько раз с разными значениями аргументов.
 @pytest.mark.parametrize("page_url", PAGES)
@@ -33,7 +33,7 @@ def test_section_navigation(section, menu, page_url):
 
         try:
             page = browser.new_page()
-            page.goto(page_url)
+            page.goto(page_url, timeout=PAGE_TIMEOUT)
             page.wait_for_timeout(2000)
             
             # Прокручиваем страницу вниз перед проверкой навигации, чтобы была видна навигация в footer

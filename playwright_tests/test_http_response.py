@@ -10,7 +10,7 @@ TEST_VALUES = [
     ("http://localhost:8080/minsk-spb", "Грузоперевозки Минск – Санкт-Петербург — тентованные фуры 25 т | ООО «Униспектрум»"),
     ("http://localhost:8080/minsk-tula", "Грузоперевозки Минск – Тула — тентованные фуры 25 т | ООО «Униспектрум»"),
 ]
-
+PAGE_TIMEOUT = 10_000
 
 @pytest.mark.parametrize("test_values", TEST_VALUES)
 def test_page_opens(test_values):
@@ -20,7 +20,7 @@ def test_page_opens(test_values):
 
         try:
             page = browser.new_page()
-            response = page.goto(page_url)
+            response = page.goto(page_url, timeout=PAGE_TIMEOUT)
 
             assert response is not None, (
                 f"Не получен HTTP-ответ для {page_url}"

@@ -27,7 +27,7 @@ TEST_VALUES_EMAIL_DETAILS = [
 ]
 
 EXPECTED_MAIN_PHONE_NUMBER = "375172750821"
-
+PAGE_TIMEOUT = 10_000
 
 # Функция оставляет только цифры в номере телефона
 def normalize_phone(value):
@@ -75,7 +75,7 @@ def test_button_phone_links(buttons):
 
         try:
             page = browser.new_page()
-            page.goto(page_url)
+            page.goto(page_url, timeout=PAGE_TIMEOUT)
             page.wait_for_timeout(2000)
 
 
@@ -107,7 +107,7 @@ def test_phone_details(phones):
 
         try:
             page = browser.new_page()
-            page.goto(page_url)
+            page.goto(page_url, timeout=PAGE_TIMEOUT)
             page.wait_for_timeout(2000)
             
             # Выбираем тестируемый элемент.
@@ -130,7 +130,7 @@ def test_email_details(emails):
 
         try:
             page = browser.new_page()
-            page.goto(page_url)
+            page.goto(page_url, timeout=PAGE_TIMEOUT)
             page.wait_for_timeout(2000)
             
             # Выбираем тестируемый элемент.

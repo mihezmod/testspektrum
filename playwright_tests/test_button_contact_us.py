@@ -9,24 +9,24 @@ TEST_VALUES=[
     ("http://localhost:8080", r"#hero > div.container-page.py-16 > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover"),
     ("http://localhost:8080/minsk-spb", r"body > div > main > section.section-y.pt-12 > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover"),
 ]
-
+PAGE_TIMEOUT = 10_000
 
 @pytest.mark.parametrize("test_values", TEST_VALUES)
 def test_contact_button(test_values):
-    starting_page, button_location = test_values
+    page_url, button_location = test_values
     with sync_playwright() as p:
         browser = p.chromium.launch()
 
         try:
             page = browser.new_page()
-            page.goto(starting_page)
+            page.goto(page_url, timeout=PAGE_TIMEOUT)
             page.wait_for_timeout(2000)
 
             # Находим кнопку в нужной части страницы.
             button = page.locator(button_location)
             assert button.count() == 1, (
                 f"Кнопка не найдена или найдена несколько раз. "
-                f"Тестовые данные: {starting_page} {button_location}; "
+                f"Тестовые данные: {page_url} {button_location}; "
             )
 
             button.click()
@@ -36,7 +36,7 @@ def test_contact_button(test_values):
             section_element = page.locator("#contacts")
             assert section_element.count() == 1, (
                 f"Раздел «Контакты» не найден или найден несколько раз. "
-                f"Тестовые данные: {starting_page} {button_location}; "
+                f"Тестовые данные: {page_url} {button_location}; "
             )
 
             # Получаем расстояние от верхней границы раздела до верха окна.
@@ -47,7 +47,7 @@ def test_contact_button(test_values):
             assert abs(top) < 200, (
                 f"Навигация к разделу «Контакты» не сработала корректно. "
                 f"Верх раздела находится на расстоянии {top:.1f} px от верха окна, ожидалось менее 200 px. "
-                f"Тестовые данные: {starting_page} {button_location}; "
+                f"Тестовые данные: {page_url} {button_location}; "
             )
 
         finally:

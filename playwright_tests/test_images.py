@@ -10,8 +10,8 @@ TEST_URLS = [
     "http://localhost:8080/minsk-tula",
 ]
 
-PAGE_TIMEOUT = 30_000
-IMAGES_TIMEOUT = 15_000
+PAGE_TIMEOUT = 10_000
+IMAGES_TIMEOUT = 5_000
 
 
 @pytest.mark.parametrize("page_url", TEST_URLS)

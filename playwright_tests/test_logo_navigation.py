@@ -8,7 +8,7 @@ PAGES = [
 ]
 EXPECTED_HREF = "/"
 LOGO_LOCATOR = 'header a:has(img[alt="Логотип Униспектрум"])'
-
+PAGE_TIMEOUT = 10_000
 
 @pytest.mark.parametrize("page_url", PAGES)
 def test_logo_navigation(page_url):
@@ -18,7 +18,7 @@ def test_logo_navigation(page_url):
 
         try:
             page = browser.new_page()
-            page.goto(page_url)
+            page.goto(page_url, timeout=PAGE_TIMEOUT)
             page.wait_for_timeout(2000)
 
             # Находим ссылку с логотипом в Header.
@@ -37,7 +37,7 @@ def test_logo_navigation(page_url):
 
             # Нажимаем на логотип.
             link.click()
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(2000)
 
             # Проверяем, что открылась главная страница.
             assert page.url.rstrip("/") == PAGES[0].rstrip("/"), (
