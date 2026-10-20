@@ -7,7 +7,7 @@ TEST_VALUES=[
     ("http://localhost:8080", r"body > div > header > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover.\!px-4.\!py-2.\!text-xs.text-center"),
     ("http://localhost:8080/minsk-moscow", r"body > div > header > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover.\!px-4.\!py-2.\!text-xs.text-center"),
     ("http://localhost:8080", r"#hero > div.container-page.py-16 > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover"),
-    ("http://localhost:8080/minsk-moscow", r"body > div > main > section.section-y.pt-12 > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover"),
+    ("http://localhost:8080/minsk-spb", r"body > div > main > section.section-y.pt-12 > div > div > a.btn-base.btn-cta.hover\:btn-cta-hover"),
 ]
 
 
