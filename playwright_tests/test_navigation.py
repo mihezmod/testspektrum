@@ -29,7 +29,7 @@ def test_section_navigation(section, menu, page_url):
     menu_name, menu_selector = menu
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
 
         try:
             page = browser.new_page()

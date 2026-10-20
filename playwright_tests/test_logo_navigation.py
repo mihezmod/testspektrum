@@ -14,7 +14,7 @@ LOGO_LOCATOR = 'header a:has(img[alt="Логотип Униспектрум"])'
 def test_logo_navigation(page_url):
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
 
         try:
             page = browser.new_page()

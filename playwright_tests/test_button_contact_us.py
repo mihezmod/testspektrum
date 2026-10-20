@@ -15,7 +15,7 @@ TEST_VALUES=[
 def test_contact_button(test_values):
     starting_page, button_location = test_values
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
 
         try:
             page = browser.new_page()

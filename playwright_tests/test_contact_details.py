@@ -71,7 +71,7 @@ def check_email_link(link):
 def test_button_phone_links(buttons):
     page_url, location, button_selector = buttons
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
 
         try:
             page = browser.new_page()
@@ -103,7 +103,7 @@ def test_button_phone_links(buttons):
 def test_phone_details(phones):
     page_url, location, phone_selector = phones
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
 
         try:
             page = browser.new_page()
@@ -126,7 +126,7 @@ def test_phone_details(phones):
 def test_email_details(emails):
     page_url, location, email_selector = emails
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
 
         try:
             page = browser.new_page()
