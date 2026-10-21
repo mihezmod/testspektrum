@@ -1,6 +1,5 @@
 import re
 import pytest
-from playwright.sync_api import sync_playwright
 
 
 TEST_VALUES_BUTTON_PHONE = [
@@ -28,6 +27,7 @@ TEST_VALUES_EMAIL_DETAILS = [
 
 EXPECTED_MAIN_PHONE_NUMBER = "375172750821"
 PAGE_TIMEOUT = 10_000
+
 
 # Функция оставляет только цифры в номере телефона
 def normalize_phone(value):
@@ -68,78 +68,56 @@ def check_email_link(link):
 
 
 @pytest.mark.parametrize("buttons", TEST_VALUES_BUTTON_PHONE)
-def test_button_phone_links(buttons):
+def test_button_phone_links(page, buttons):
     page_url, location, button_selector = buttons
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
 
-        try:
-            page = browser.new_page()
-            page.goto(page_url, timeout=PAGE_TIMEOUT)
-            page.wait_for_timeout(2000)
+    page.goto(page_url, timeout=PAGE_TIMEOUT, wait_until="domcontentloaded")
 
-
-            # Выбираем тестируемый элемент.
-            button_phone_link = page.locator(button_selector)
-            # Проверяем что нашелся конкретно он один
-            assert button_phone_link.count() == 1, (
-                f"Ожидалась ровно одна кнопка с телефоном в секции '{location}' на странице '{page_url}'"
-            )
-            # Проверяем соответствие ссылки и текста на кнопке
-            check_phone_link(button_phone_link)
+    # Выбираем тестируемый элемент.
+    button_phone_link = page.locator(button_selector)
+    # Проверяем что нашелся конкретно он один
+    assert button_phone_link.count() == 1, (
+        f"Ожидалась ровно одна кнопка с телефоном в секции '{location}' на странице '{page_url}'"
+    )
+    # Проверяем соответствие ссылки и текста на кнопке
+    check_phone_link(button_phone_link)
             
-            button_phone_number = normalize_phone(
-                button_phone_link.inner_text()
-            )
-            assert button_phone_number == EXPECTED_MAIN_PHONE_NUMBER, (
-                f"Номер телефона в разделе {location} ({button_phone_number}) "
-                f"не совпадает с основным номером телефона ({EXPECTED_MAIN_PHONE_NUMBER})"
-            )
-        finally:
-            browser.close()
+    button_phone_number = normalize_phone(
+        button_phone_link.inner_text()
+    )
+    assert button_phone_number == EXPECTED_MAIN_PHONE_NUMBER, (
+        f"Номер телефона в разделе {location} ({button_phone_number}) "
+        f"не совпадает с основным номером телефона ({EXPECTED_MAIN_PHONE_NUMBER})"
+    )
 
 
 @pytest.mark.parametrize("phones", TEST_VALUES_PHONE_DETAILS)
-def test_phone_details(phones):
+def test_phone_details(page, phones):
     page_url, location, phone_selector = phones
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
 
-        try:
-            page = browser.new_page()
-            page.goto(page_url, timeout=PAGE_TIMEOUT)
-            page.wait_for_timeout(2000)
+    page.goto(page_url, timeout=PAGE_TIMEOUT, wait_until="domcontentloaded")
             
-            # Выбираем тестируемый элемент.
-            phone_link = page.locator(phone_selector)
-            # Проверяем что нашелся конкретно он один
-            assert phone_link.count() == 1, (
-                f"Ожидался ровно один элемент по селектору '{phone_selector}' в секции '{location}' на странице '{page_url}'"
-            )
-            # Проверяем соответствие ссылки и текста на элементе
-            check_phone_link(phone_link) 
-        finally:
-            browser.close()
+    # Выбираем тестируемый элемент.
+    phone_link = page.locator(phone_selector)
+    # Проверяем что нашелся конкретно он один
+    assert phone_link.count() == 1, (
+        f"Ожидался ровно один элемент по селектору '{phone_selector}' в секции '{location}' на странице '{page_url}'"
+    )
+    # Проверяем соответствие ссылки и текста на элементе
+    check_phone_link(phone_link) 
             
             
 @pytest.mark.parametrize("emails", TEST_VALUES_EMAIL_DETAILS)
-def test_email_details(emails):
+def test_email_details(page, emails):
     page_url, location, email_selector = emails
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
 
-        try:
-            page = browser.new_page()
-            page.goto(page_url, timeout=PAGE_TIMEOUT)
-            page.wait_for_timeout(2000)
+    page.goto(page_url, timeout=PAGE_TIMEOUT, wait_until="domcontentloaded")
             
-            # Выбираем тестируемый элемент.
-            email_link = page.locator(email_selector)
-            # Проверяем что нашелся конкретно он один
-            assert email_link.count() == 1, (
-                f"Ожидался ровно один элемент по селектору '{email_selector}' в секции '{location}' на странице '{page_url}'"
-            )
-            # Проверяем соответствие ссылки и текста на элементе
-            check_email_link(email_link) 
-        finally:
-            browser.close()
+    # Выбираем тестируемый элемент.
+    email_link = page.locator(email_selector)
+    # Проверяем что нашелся конкретно он один
+    assert email_link.count() == 1, (
+        f"Ожидался ровно один элемент по селектору '{email_selector}' в секции '{location}' на странице '{page_url}'"
+    )
+    # Проверяем соответствие ссылки и текста на элементе
+    check_email_link(email_link) 

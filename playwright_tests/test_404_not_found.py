@@ -1,4 +1,3 @@
-from playwright.sync_api import sync_playwright
 from playwright.sync_api import expect
 
 
@@ -7,15 +6,23 @@ PAGE_TITLE="Страница не найдена — ООО «Униспектр
 RESPONSE_CODE=404
 PAGE_TIMEOUT = 10_000
 
-def test_404_not_found_page_opens():
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
 
-        response = page.goto(PAGE_URL, timeout=PAGE_TIMEOUT)
+def test_404_not_found_page_opens(page):
+    response = page.goto(
+        PAGE_URL,
+        timeout=PAGE_TIMEOUT,
+        wait_until="domcontentloaded",
+    )
 
-        assert response is not None
-        assert response.status == RESPONSE_CODE
-        expect(page).to_have_title(PAGE_TITLE)
+    assert response is not None, (
+        f"Не получен HTTP-ответ для страницы {PAGE_URL}"
+    )
 
-        browser.close()
+    assert response.status == RESPONSE_CODE, (
+        f"Ожидался HTTP {RESPONSE_CODE}, получен HTTP {response.status}"
+    )
+
+    expect(page).to_have_title(
+        PAGE_TITLE,
+        timeout=PAGE_TIMEOUT,
+    )

@@ -1,4 +1,3 @@
-
 import pytest
 from playwright.sync_api import sync_playwright, expect
 
@@ -12,25 +11,19 @@ TEST_VALUES = [
 ]
 PAGE_TIMEOUT = 10_000
 
+
 @pytest.mark.parametrize("test_values", TEST_VALUES)
-def test_page_opens(test_values):
+def test_page_opens(page, test_values):
     page_url, page_title = test_values
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
+    
+    response = page.goto(page_url, timeout=PAGE_TIMEOUT, wait_until="domcontentloaded")
 
-        try:
-            page = browser.new_page()
-            response = page.goto(page_url, timeout=PAGE_TIMEOUT)
+    assert response is not None, (
+        f"Не получен HTTP-ответ для {page_url}"
+    )
+    assert response.status == RESPONSE_CODE, (
+        f"Ожидался HTTP {RESPONSE_CODE}, "
+        f"получен HTTP {response.status}: {page_url}"
+    )
 
-            assert response is not None, (
-                f"Не получен HTTP-ответ для {page_url}"
-            )
-            assert response.status == RESPONSE_CODE, (
-                f"Ожидался HTTP {RESPONSE_CODE}, "
-                f"получен HTTP {response.status}: {page_url}"
-            )
-
-            expect(page).to_have_title(page_title)
-
-        finally:
-            browser.close()
+    expect(page).to_have_title(page_title, timeout=PAGE_TIMEOUT)

@@ -1,6 +1,4 @@
-import re
 import pytest
-from playwright.sync_api import sync_playwright
 
 
 TEST_VALUES=[
@@ -11,44 +9,37 @@ TEST_VALUES=[
 ]
 PAGE_TIMEOUT = 10_000
 
+
 @pytest.mark.parametrize("test_values", TEST_VALUES)
-def test_contact_button(test_values):
+def test_contact_button(page, test_values):
     page_url, button_location = test_values
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
 
-        try:
-            page = browser.new_page()
-            page.goto(page_url, timeout=PAGE_TIMEOUT)
-            page.wait_for_timeout(2000)
+    page.goto(page_url, timeout=PAGE_TIMEOUT, wait_until="domcontentloaded")
 
-            # Находим кнопку в нужной части страницы.
-            button = page.locator(button_location)
-            assert button.count() == 1, (
-                f"Кнопка не найдена или найдена несколько раз. "
-                f"Тестовые данные: {page_url} {button_location}; "
-            )
+    # Находим кнопку в нужной части страницы.
+    button = page.locator(button_location)
+    assert button.count() == 1, (
+        f"Кнопка не найдена или найдена несколько раз. "
+        f"Тестовые данные: {page_url} {button_location}; "
+    )
 
-            button.click()
-            page.wait_for_timeout(3000)
+    button.click()
+    page.wait_for_timeout(1000)
 
-           # Проверяем, что нужный раздел существует ровно в одном экземпляре.
-            section_element = page.locator("#contacts")
-            assert section_element.count() == 1, (
-                f"Раздел «Контакты» не найден или найден несколько раз. "
-                f"Тестовые данные: {page_url} {button_location}; "
-            )
+   # Проверяем, что нужный раздел существует ровно в одном экземпляре.
+    section_element = page.locator("#contacts")
+    assert section_element.count() == 1, (
+        f"Раздел «Контакты» не найден или найден несколько раз. "
+        f"Тестовые данные: {page_url} {button_location}; "
+    )
 
-            # Получаем расстояние от верхней границы раздела до верха окна.
-            top = section_element.evaluate(
-                "(element) => element.getBoundingClientRect().top"
-            )
-            # Убеждаемся что расстояние в допустимых пределах.
-            assert abs(top) < 200, (
-                f"Навигация к разделу «Контакты» не сработала корректно. "
-                f"Верх раздела находится на расстоянии {top:.1f} px от верха окна, ожидалось менее 200 px. "
-                f"Тестовые данные: {page_url} {button_location}; "
-            )
-
-        finally:
-            browser.close()
+    # Получаем расстояние от верхней границы раздела до верха окна.
+    top = section_element.evaluate(
+        "(element) => element.getBoundingClientRect().top"
+    )
+    # Убеждаемся что расстояние в допустимых пределах.
+    assert abs(top) < 200, (
+        f"Навигация к разделу «Контакты» не сработала корректно. "
+        f"Верх раздела в {top:.1f} px от верха окна, ожидалось менее 200 px. "
+        f"Тестовые данные: {page_url} {button_location}; "
+    )

@@ -38,4 +38,4 @@ jobs:
           python -m playwright install --with-deps chromium
 
       - name: Run tests
-        run: python -m pytest -v
+        run: python -m pytest -v -s
