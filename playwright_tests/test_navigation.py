@@ -58,7 +58,7 @@ def test_section_navigation(page, section, menu, page_url):
     )
             
     link.click()
-    page.wait_for_timeout(3000)
+    page.wait_for_timeout(2000)
 
     # Проверяем, что нужный раздел существует ровно в одном экземпляре.
     section_element = page.locator(f"#{section_id}")
