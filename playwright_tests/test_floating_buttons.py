@@ -19,11 +19,14 @@ CALL_BUTTON = 'a[aria-label="Позвонить"]'
 THEME_BUTTON = 'button[aria-label="Тёмная тема"], button[aria-label="Светлая тема"]'
 
 
+# Блок кнопок виден на обеих страницах, порядок кнопок правильный.
 @pytest.mark.parametrize("url", PAGES)
 def test_floating_buttons_visibility_and_order(page, url):
-    """Блок кнопок виден на обеих страницах, порядок кнопок правильный."""
     page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT)
-
+    page.wait_for_timeout(2000)
+    page.evaluate(
+                "window.scrollTo(0, document.body.scrollHeight)"
+            )
     block = page.locator(BUTTONS_BLOCK)
     expect(block).to_be_visible()
 
@@ -75,17 +78,17 @@ def test_call_button_link(page, url):
     expect(call_button).to_have_attribute("href", MAIN_PHONE)
 
 
+# Иконка соответствует теме, переключение меняет тему и сохраняет выбор.
 @pytest.mark.parametrize("url", PAGES)
 def test_theme_button_icon_and_toggle(page, url):
-    """Иконка соответствует теме, переключение меняет тему и сохраняет выбор."""
-
     # Устанавливаем светлую тему перед загрузкой страницы.
     page.add_init_script("""
         localStorage.setItem("theme", "light");
     """)
 
     page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT)
-
+    page.wait_for_timeout(2000)
+    
     html = page.locator("html")
     theme_button = page.locator(BUTTONS_BLOCK).locator(THEME_BUTTON)
 
@@ -110,4 +113,3 @@ def test_theme_button_icon_and_toggle(page, url):
     expect(theme_button).to_have_attribute("aria-label", "Тёмная тема")
     expect(theme_button.locator("svg.lucide-moon")).to_be_visible()
     assert page.evaluate("localStorage.getItem('theme')") == "light"
-
