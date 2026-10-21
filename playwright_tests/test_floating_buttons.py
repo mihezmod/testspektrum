@@ -82,9 +82,9 @@ def test_call_button_link(page, url):
 @pytest.mark.parametrize("url", PAGES)
 def test_theme_button_icon_and_toggle(page, url):
     # Устанавливаем светлую тему перед загрузкой страницы.
-    page.add_init_script("""
-        localStorage.setItem("theme", "light");
-    """)
+    # page.add_init_script("""
+    #     localStorage.setItem("theme", "light");
+    # """)
 
     page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT)
     page.wait_for_timeout(2000)
