@@ -64,7 +64,7 @@ def test_section_navigation(page, section, menu, page_url):
     section_element = page.locator(f"#{section_id}")
     assert section_element.count() == 1, (
         f"Раздел «{link_title}» с id='{section_id}' не найден или найден несколько раз. "
-        f"Страница: {page_url}; меню: {menu_name}"
+        f"Страница: {page_url};"
     )
 
     # Получаем расстояние от верхней границы раздела до верха окна.
