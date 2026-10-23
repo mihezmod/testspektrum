@@ -1,4 +1,3 @@
-
 from playwright.sync_api import expect
 
 
@@ -23,7 +22,7 @@ def test_mobile_menu_toggle(page):
         wait_until="domcontentloaded",
         timeout=PAGE_TIMEOUT,
     )
-    page.wait_for_timeout(4000)
+    page.wait_for_timeout(3000)
 
     menu_button = page.locator(MENU_BUTTON)
     mobile_navigation = page.locator(MOBILE_NAVIGATION)

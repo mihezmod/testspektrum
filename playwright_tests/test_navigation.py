@@ -1,6 +1,8 @@
 import pytest
 
 
+PAGE_TIMEOUT = 10_000
+MOBILE_WIDTH = 600
 PAGES = [
     "http://localhost:8080",
     "http://localhost:8080/minsk-moscow",
@@ -16,8 +18,9 @@ SECTIONS = [
 MENUS = [
     ("header", "body > div > header > div > nav > a"),
     ("footer", r"body > div > footer > div.container-page.grid.gap-8.md\:grid-cols-2 > nav > ul > li > a"),
+    ("mobile", "body > div > header > nav[aria-label=\"Мобильная навигация\"]")
 ]
-PAGE_TIMEOUT = 10_000
+MENU_BUTTON = 'header button[aria-label="Меню"]'
 
 
 # Декоратор pytest. Позволяет запустить функцию несколько раз с разными значениями аргументов.
@@ -31,14 +34,15 @@ def test_section_navigation(page, section, menu, page_url):
     page.goto(page_url, timeout=PAGE_TIMEOUT)
     page.wait_for_timeout(2000)
             
-    # Прокручиваем страницу вниз перед проверкой навигации, чтобы была видна навигация в footer
-    # page.evaluate() нужен для выполнения JavaScript-кода внутри страницы
-    if menu_name == "footer":
-        page.evaluate(
-            "window.scrollTo(0, document.body.scrollHeight)"
-        )
-        page.wait_for_timeout(500)
-            
+    if menu_name == "mobile":
+        page.set_viewport_size({
+                "width": MOBILE_WIDTH,
+                "height": 900,
+            })
+        page.wait_for_timeout(1000)
+        menu_button = page.locator(MENU_BUTTON)
+        menu_button.click()
+          
     # Выбираем ссылки в Header или Footer по CSS-селектору.
     menu_links = page.locator(menu_selector)
     # Ищем среди выбранных ссылок ту, у которой нужный текст.
